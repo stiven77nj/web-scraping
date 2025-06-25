@@ -33,8 +33,8 @@ Se accede a la página para extraer informacion del clima y de suelo:
 1. Clona el repositorio:
 
 ```bash
-$ git clone https://github.com/tu_usuario/web-scraping-mercately-api.git
-$ cd web-scraping-mercately-api
+$ git clone https://github.com/stiven77nj/web-scraping.git
+$ cd web-scraping
 ```
 
 2. Instala las dependencias:
@@ -46,12 +46,21 @@ npm install
 3. Configura el archivo .env:
 
 ```bash
-MERCATELY_USER=tu_usuario
-MERCATELY_PASSWORD=tu_contraseña
-SQLSERVER_HOST=localhost
-SQLSERVER_USER=sa
-SQLSERVER_PASSWORD=tu_password
-SQLSERVER_DATABASE=NombreDB
+# CREDENCIALES MERCATELY
+MERCATELY_USER=UsuarioMercately
+MERCATELY_PASSWORD=ClaveMercately
+MERCATELY_BASE_URL=https://url.com
+MERCATELY_DOWNLOAD_DIR=./downloads/mercately
+
+# CREDENCIALES MERCATELY
+API_CROPS_USER=UsuarioApiCrops
+API_CROPS_PASSWORD=ClaveApiCrops
+API_CROPS_BASE_URL=https://url.com
+API_CROPS_DOWNLOAD_DIR=downloads/api_crops/
+
+
+# VARIABLES API REST - EXPRESS
+PORT_API=0000
 ```
 
 4. Ejecuta la API localmente:
@@ -64,7 +73,7 @@ npm run dev
 
 ```bash
 docker build -t scraping-api .
-docker run -p 3000:3000 scraping-api
+docker run -p 8081:8081 scraping-api
 ```
 
 ## 🔌 Endpoints disponibles
