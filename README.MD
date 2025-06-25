@@ -66,7 +66,7 @@ PORT_API=0000
 4. Ejecuta la API localmente:
 
 ```bash
-npm run dev
+npm run start
 ```
 
 ## 🐳 Uso con Docker
@@ -79,6 +79,7 @@ docker run -p 8081:8081 scraping-api
 ## 🔌 Endpoints disponibles
 
 - GET /api/mercately – Ejecuta el proceso de scraping para obtener informe clientes desde Mercately.
+- GET /api/apicrops – Ejecuta el proceso de scraping para obtener informe del clima y suelos desde ApiCrops.
 
 ## 🗃️ Base de datos
 
