@@ -54,13 +54,14 @@ export const runMercadoLibreFlow = async (vehiculo) => {
         elements => elements.map(el => el.textContent)
     );
 
-    if (precios.length > 0) {
-        const transformatedPrices = precios.map(precio => Number(precio.replaceAll('.', '')));
-        transformatedPrices.sort((a, b) => a - b);
-    }
-
     /**
      * Retornar el precio mayor y el precio menor encontrado.
     */
-    return precios?.length >= 0 ? [transformatedPrices[0], transformatedPrices[transformatedPrices.length - 1]] : [];
+    if (precios.length > 0) {
+        const transformatedPrices = precios.map(precio => Number(precio.replaceAll('.', '')));
+        transformatedPrices.sort((a, b) => a - b);
+        return [transformatedPrices[0], transformatedPrices[transformatedPrices.length - 1]];
+    } else {
+        return [];
+    }
 }
