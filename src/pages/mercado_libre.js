@@ -55,10 +55,11 @@ export const runMercadoLibreFlow = async (vehiculo) => {
     );
 
     const transformatedPrices = precios.map(precio => Number(precio.replaceAll('.', '')));
+    
     transformatedPrices.sort((a, b) => a - b);
 
     /**
      * Retornar el precio mayor y el precio menor encontrado.
     */
-    return precios?.length >= 0 ? [precios[0], precios[precios.length - 1]] : [];
+    return precios?.length >= 0 ? [transformatedPrices[0], transformatedPrices[transformatedPrices.length - 1]] : [];
 }
