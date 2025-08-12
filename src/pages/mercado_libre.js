@@ -53,7 +53,9 @@ export const runMercadoLibreFlow = async (vehiculo) => {
         '.poly-price__current .andes-money-amount__fraction',
         elements => elements.map(el => el.textContent)
     );
-    precios.sort();
+
+    const transformatedPrices = precios.map(precio => Number(precio.replaceAll('.', '')));
+    transformatedPrices.sort((a, b) => a - b);
 
     /**
      * Retornar el precio mayor y el precio menor encontrado.
