@@ -1,7 +1,7 @@
 name: CI/CD Deploy to production
 
 on:
-  pull_request:
+  push:
     branches: 
       - main # Deployment happens when there is a push to the main branch
 
