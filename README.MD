@@ -19,6 +19,10 @@ Se accede a la página para extraer informacion del clima y de suelo:
 
 > [https://web.instacrops.com](https://web.instacrops.com)
 
+Se accede a la página para extraer informacion de los precios (Mas bajo, mas alto) de un carro en especifico:
+
+> [https://tucarro.com](https://tucarro.com)
+
 ## ⚙️ Estructura del Proyecto
 
 - /api
