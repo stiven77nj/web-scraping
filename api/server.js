@@ -21,6 +21,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /**
+ * Endpoint de "Tu carro".
+*/
+app.get('/obtenerPrecios', async (req, res) => {
+    try {
+
+        const { vehiculo } = req.body;
+
+        const response = await runMercadoLibreFlow(vehiculo);
+        
+        res.status(200).json({
+            "status": "✅ Scraping ejecutado correctamente.",
+            "data": response
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('❌ Error al ejecutar el scraping.');
+    }
+});
+
+/**
  * Endpoint de "Mercately".
 */
 // app.get('/mercately', async (req, res) => {
@@ -58,27 +79,6 @@ app.use(express.urlencoded({ extended: true }));
 //         res.status(500).send('❌ Error al ejecutar el scraping.');
 //     }
 // });
-
-/**
- * Endpoint de "Mercado libre".
-*/
-app.get('/obtenerPrecios', async (req, res) => {
-    try {
-
-        const { vehiculo } = req.body;
-
-        const response = await runMercadoLibreFlow(vehiculo);
-        
-        res.status(200).json({
-            "status": "✅ Scraping ejecutado correctamente.",
-            "data": response
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('❌ Error al ejecutar el scraping.');
-    }
-});
 
 
 /**
