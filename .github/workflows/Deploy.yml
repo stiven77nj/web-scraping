@@ -37,7 +37,7 @@ jobs:
           docker rmi web-scraping || echo "ℹ No image to remove"
 
           echo "⚙️ Building new image..."
-          docker build -t --no-cache web-scraping .
+          docker build --no-cache -t web-scraping .
 
           echo "🚀 Starting new container..."
           docker run -d -p 8082:8081 --env-file .env --name web-scraping web-scraping
