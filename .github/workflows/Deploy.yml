@@ -7,9 +7,17 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Show messages before connecting
+      - name: Show connection info
+        run: |
+          echo "🔗 Connecting to the server..."
+          echo "📍 IP Address: ${{ secrets.SERVER_IP }}"
+          echo "👤 Username: ${{ secrets.SERVER_USERNAME }}"
+
+      # Step 2: Connect to the server and deploy
       - name: SSH into server and deploy
         uses: appleboy/ssh-action@master
         with:
@@ -17,11 +25,25 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /home/arar/desarrollo/web-scraping
-            git pull origin maiN
-            docker stop web-scraping || true
-            docker rm web-scraping || true
-            docker rmi web-scraping || true
+            set -e  # Stop execution if any step fails
+            cd /home/arar/desarrollo/web-scraping || { echo "❌ Folder not found"; exit 1; }
+
+            echo "🔄 Pulling latest changes..."
+            git pull origin main || { echo "❌ Git pull failed"; exit 1; }
+
+            echo "🛑 Stopping existing container..."
+            docker stop web-scraping || echo "ℹ No container to stop"
+
+            echo "🗑 Removing old container..."
+            docker rm web-scraping || echo "ℹ No container to remove"
+
+            echo "🗑 Removing old image..."
+            docker rmi web-scraping || echo "ℹ No image to remove"
+
+            echo "⚙️ Building new image..."
             docker build -t --no-cache web-scraping .
+
+            echo "🚀 Starting new container..."
             docker run -d -p 8082:8081 --env-file .env --name web-scraping web-scraping
-          
+
+            echo "✅ Deployment completed successfully"
