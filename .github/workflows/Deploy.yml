@@ -10,6 +10,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Allow safe directory
+        run: git config --global --add safe.directory /home/arar/desarrollo/web-scraping
+
       # Step 1: Connect to the server and deploy
       - name: Build and deploy
         run: |
@@ -17,7 +20,12 @@ jobs:
           cd /home/arar/desarrollo/web-scraping || { echo "❌ Folder not found"; exit 1; }
 
           echo "🔄 Pulling latest changes..."
-          git pull origin main || { echo "❌ Git pull failed"; exit 1; }
+          if ! git pull origin main; then
+            echo "❌ Git pull failed. Showing Git status and config for debugging:"
+            git status || true
+            git config --list || true
+            exit 1
+          fi
 
           echo "🛑 Stopping existing container..."
           docker stop web-scraping || echo "ℹ No container to stop"
