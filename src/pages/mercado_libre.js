@@ -10,7 +10,7 @@ export const runMercadoLibreFlow = async (vehiculo) => {
     /**
      * Lanzar el navegador.
      */
-    const browser = await launchBrowser(false);
+    const browser = await launchBrowser(true);
 
     /**
      * Abrir una pagina nueva.
