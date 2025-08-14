@@ -10,7 +10,7 @@ export const runMercadoLibreFlow = async (vehiculo) => {
     /**
      * Lanzar el navegador.
      */
-    const browser = await launchBrowser(true);
+    const browser = await launchBrowser(false);
 
     /**
      * Abrir una pagina nueva.
@@ -47,21 +47,49 @@ export const runMercadoLibreFlow = async (vehiculo) => {
     await page.waitForSelector('.poly-card__content', { visible: true });
 
     /**
-     * Obtener los precios y ordenar array de menor a mayor.
+     * Ordernar de menor a mayor.
     */
-    const precios = await page.$$eval(
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    await page.waitForSelector('.ui-search-sort-filter', { visible: true });
+    await page.click('.ui-search-sort-filter');
+    await page.waitForSelector('.andes-list__item', { visible: true });
+    await page.evaluate(() => {
+        const opciones = Array.from(document.querySelectorAll('.andes-list__item'));
+        const opcion = opciones.find(el => el.innerText.includes('Menor precio'));
+        if (opcion) opcion.click();
+    });
+
+    /**
+     * Esperar a cargar los resultados.
+    */
+    await page.waitForSelector('.poly-card__content', { visible: true });
+    const lowerPrices = await page.$$eval(
         '.poly-price__current .andes-money-amount__fraction',
         elements => elements.map(el => el.textContent)
     );
+    const transformatedlowerPrices = lowerPrices.map(precio => Number(precio.replaceAll('.', '')));
+    const lowerPrice = transformatedlowerPrices.sort((a, b) => a - b);
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    await page.waitForSelector('.ui-search-sort-filter', { visible: true });
+    await page.click('.ui-search-sort-filter');
+    await page.waitForSelector('.andes-list__item', { visible: true });
+    await page.evaluate(() => {
+        const opciones = Array.from(document.querySelectorAll('.andes-list__item'));
+        const opcion = opciones.find(el => el.innerText.includes('Mayor precio'));
+        if (opcion) opcion.click();
+    });
 
     /**
-     * Retornar el precio mayor y el precio menor encontrado.
+     * Esperar a cargar los resultados.
     */
-    if (precios.length > 0) {
-        const transformatedPrices = precios.map(precio => Number(precio.replaceAll('.', '')));
-        transformatedPrices.sort((a, b) => a - b);
-        return [transformatedPrices[0], transformatedPrices[transformatedPrices.length - 1]];
-    } else {
-        return [];
-    }
+    await page.waitForSelector('.poly-card__content', { visible: true });
+    const higherPrices = await page.$$eval(
+        '.poly-price__current .andes-money-amount__fraction',
+        elements => elements.map(el => el.textContent)
+    );
+    const transformatedhigherPrices = higherPrices.map(precio => Number(precio.replaceAll('.', '')));
+    const higherPrice = transformatedhigherPrices.sort((a, b) => b - a);
+
+    return [lowerPrice[0] ?? '', higherPrice[0] ?? ''];
 }
